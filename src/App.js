@@ -1,5 +1,5 @@
 import React from 'react';
-import {useState} from 'react';
+import {useState,useEffect} from 'react';
 import { OrbitProgress } from 'react-loading-indicators';
 import MoviesList from './components/MoviesList';
 import './App.css';
@@ -9,16 +9,19 @@ function App() {
   const [loading,setLoading] = useState(false);
   const [error,setError] = useState(null)
  
-  
-  const fetchMoviesHandler = async () => {
+  useEffect( ()=> {
+    const fetchMoviesHandler = async () => {
     setLoading(true);
     setError(null)
     try{
+
         const response = await fetch('https://swapi.info/api/films/');
         if(!response.ok){
           throw new Error('Something went wrong ....Retrying');
         }
-
+        setTimeout(() => {
+        setLoading(false);
+        }, 5000);
         const data = await response.json();
         const transformedMovies = data.map((movieData) => {
         return {
@@ -37,8 +40,13 @@ function App() {
           }, 5000);
         console.log(error);
     }
-    setLoading(false)
+    
   }
+  fetchMoviesHandler();
+  },[])
+
+  
+  
 
   const cancelHandler = () => {
     setError(null);
@@ -47,8 +55,8 @@ function App() {
   return (
     <React.Fragment>
       <section>
-        <button onClick={fetchMoviesHandler} disabled={loading}>
-          {loading ? 'Fetching...' : 'Fetch Movies'}
+        <button >
+          {loading ? 'Fetching...' : 'Fetched Movies'}
         </button>
       </section>
       <section>
