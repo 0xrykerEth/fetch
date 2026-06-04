@@ -2,6 +2,7 @@ import React from 'react';
 import {useState,useEffect} from 'react';
 import { OrbitProgress } from 'react-loading-indicators';
 import MoviesList from './components/MoviesList';
+import Form from './components/Form';
 import './App.css';
 
 function App() {
@@ -48,21 +49,20 @@ function App() {
   
   
 
-  const cancelHandler = () => {
-    setError(null);
-  }
+ 
 
   return (
     <React.Fragment>
+      <Form/>
       <section>
-        <button >
+        <h1 >
           {loading ? 'Fetching...' : 'Fetched Movies'}
-        </button>
+        </h1>
       </section>
       <section>
-        {loading && <OrbitProgress color="#ff2300" size="medium" text="" textColor="" />}
+        {loading && <OrbitProgress color="#ff2300" size="medium" text="GOY RAUL" textColor="" />}
         {!loading &&  <MoviesList movies={movies} />}
-        {!loading && error && (<><p>{error}</p><button onClick={cancelHandler}>Cancel</button></>)}
+        {!loading && error && (<><p>{error}</p><button>Cancel</button></>)}
       </section>
     </React.Fragment>
   );
