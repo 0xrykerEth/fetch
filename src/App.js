@@ -1,6 +1,6 @@
 import React from 'react';
 import {useState} from 'react';
-
+import { OrbitProgress } from 'react-loading-indicators';
 import MoviesList from './components/MoviesList';
 import './App.css';
 
@@ -32,7 +32,7 @@ function App() {
         </button>
       </section>
       <section>
-        {loading && <p>Loading...</p>}
+        {loading && <OrbitProgress color="#ff2300" size="medium" text="" textColor="" />}
         {!loading && <MoviesList movies={movies} />}
       </section>
     </React.Fragment>
