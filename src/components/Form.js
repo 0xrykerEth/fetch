@@ -2,7 +2,7 @@ import './Form.css'
 import {useState} from 'react'
 
 
-const Form = ()=> {
+const Form = ({onAddMovie})=> {
 const initialData = {
     title: '',
     date: '',
@@ -17,9 +17,8 @@ const [data,setData] = useState({
 
 const submitHandler = (e)=> {
     e.preventDefault();
-    console.log(data)
+    onAddMovie(data);
     setData(initialData);
-
 }
 
     return(

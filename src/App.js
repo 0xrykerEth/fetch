@@ -9,14 +9,15 @@ function App() {
   const [movies, setMovies] = useState([]);
   const [loading,setLoading] = useState(false);
   const [error,setError] = useState(null)
- 
-  useEffect( ()=> {
-    const fetchMoviesHandler = async () => {
+
+   const fetchMoviesHandler = async () => {
     setLoading(true);
     setError(null)
     try{
 
-        const response = await fetch('https://swapi.info/api/films/');
+        const response = await fetch('https://react-https-b20a5-default-rtdb.asia-southeast1.firebasedatabase.app/movies.json',{
+          method : 'GET',
+        });
         if(!response.ok){
           throw new Error('Something went wrong ....Retrying');
         }
@@ -24,36 +25,56 @@ function App() {
         setLoading(false);
         }, 5000);
         const data = await response.json();
-        const transformedMovies = data.map((movieData) => {
-        return {
-          id: movieData.episode_id,
-          title: movieData.title,
-          director: movieData.director,
-          releaseDate: movieData.release_date
+        console.log(data)
+        const loadedMovies = [];
+
+        for(const key in data){
+          loadedMovies.push({
+            id : key,
+            title : data[key].title,
+            director : data[key].director,
+            releaseDate : data[key].date
+          });
         }
-    })
-    setMovies(transformedMovies);
+    setMovies(loadedMovies);
+    
     }catch(error){
       setError(error.message)
          setTimeout(() => {
-          fetchMoviesHandler();
+          setLoading(false)
           console.log(1);
-          }, 5000);
+          }, 1000);
         console.log(error);
     }
     
   }
+ 
+  useEffect( ()=> {
   fetchMoviesHandler();
   },[])
 
-  
+
+ async function movieHandler(item){
+   const response = await fetch('https://react-https-b20a5-default-rtdb.asia-southeast1.firebasedatabase.app/movies.json',{
+      method : 'POST',
+      body : JSON.stringify(item),
+      headers : {
+        'Content-type' : 'application/json'
+      }
+    })
+
+    const data = response.json();
+    fetchMoviesHandler();
+    console.log(data)
+    console.log(item);
+  }
   
 
  
 
   return (
     <React.Fragment>
-      <Form/>
+      <Form onAddMovie={movieHandler}/>
       <section>
         <h1 >
           {loading ? 'Fetching...' : 'Fetched Movies'}
