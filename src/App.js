@@ -53,6 +53,17 @@ function App() {
   fetchMoviesHandler();
   },[])
 
+  const deleteMovieHandler = async (id) => {
+  await fetch(
+    `https://react-https-b20a5-default-rtdb.asia-southeast1.firebasedatabase.app/movies/${id}.json`,
+    {
+      method: 'DELETE'
+    }
+  );
+
+  fetchMoviesHandler();
+};
+
 
  async function movieHandler(item){
    const response = await fetch('https://react-https-b20a5-default-rtdb.asia-southeast1.firebasedatabase.app/movies.json',{
@@ -82,7 +93,7 @@ function App() {
       </section>
       <section>
         {loading && <OrbitProgress color="#ff2300" size="medium" text="GOY RAUL" textColor="" />}
-        {!loading &&  <MoviesList movies={movies} />}
+        {!loading &&  <MoviesList movies={movies} onDeleteMovie={deleteMovieHandler}/>}
         {!loading && error && (<><p>{error}</p><button>Cancel</button></>)}
       </section>
     </React.Fragment>
